@@ -1,41 +1,42 @@
 # opencode-autopolit
 
-强制工作流框架 - 探索→规范→验证→开发(TDD)→验证→归档
+Forced Workflow Framework - Explore→Spec→Verify→Develop(TDD)→Verify→Archive
 
 **English** | [简体中文](README.zh-cn.md) | [日本語](README.ja.md) | [한국어](README.ko.md) | [Русский](README.ru.md)
 
-## 概述
+## Overview
 
-基于 oh-my-openagent + OpenSpec + Superpowers 的集成开发框架，强制执行规范驱动+测试驱动的开发流程。
+An integrated development framework based on oh-my-openagent + OpenSpec + Superpowers, enforcing specification-driven + test-driven development process.
 
-## 核心工作流
+## Core Workflow
 
 ```
 EXPLORE → SPEC → DESIGN VERIFICATION → DEV → VERIFY → ARCHIVE
-   ↓          ↓           ↓                  ↓       ↓         ↓
-  CRG     Proposal    假设验证          TDD    Checklists  Merge
-        Specs/Design  (BLOCKS DEV)    RED→GR→RF  User Approval
+   ↓       ↓           ↓              ↓       ↓         ↓
+  CRG   Proposal    Assumption      TDD    Checklists   Merge
+       Specs/Design  Verification  RED→GR→RF  User Approval
+       (BLOCKS DEV)
 ```
 
-## 框架对比分析
+## Framework Comparison
 
-### 现有方案的问题
+### Problems with Existing Solutions
 
-| 框架 | 核心优势 | 核心缺陷 |
-|------|----------|----------|
-| **oh-my-openagent** | 强大的插件系统、hooks 机制、workflow 编排 | 缺少规范驱动的工作流，容易"想到什么写什么" |
-| **OpenSpec** | 规范的文档体系 (proposal→specs→design→tasks) | 仅为文档工具，无执行约束力，可被跳过 |
-| **Superpowers** | 丰富的 skills 库 (TDD, debugging, code review) | 需手动调用，Agent 常忽略或遗忘 |
-| **Code-Review-Graph** | 代码结构分析、依赖关系、影响半径 | 属于"事后诸葛亮"，无法预防设计错误 |
-| **WeChat-ACP** | 微信通知、进度同步 | 仅做通知，无工作流整合 |
+| Framework | Core Strength | Core Weakness |
+|-----------|---------------|---------------|
+| **oh-my-openagent** | Powerful plugin system, hooks, workflow orchestration | Lacks specification-driven workflow, prone to "write as you think" |
+| **OpenSpec** | Structured documentation (proposal→specs→design→tasks) | Documentation only, no enforcement, can be skipped |
+| **Superpowers** | Rich skills library (TDD, debugging, code review) | Manual invocation required, Agent often ignores or forgets |
+| **Code-Review-Graph** | Code structure analysis, dependencies, impact radius | "Hindsight only", cannot prevent design errors |
+| **WeChat-ACP** | WeChat notifications, progress sync | Notifications only, no workflow integration |
 
-### 核心矛盾
+### Core Conflicts
 
-1. **规范 vs 随意**: OpenSpec 提供规范，但 Agent 可跳过直接写代码
-2. **设计 vs 实现**: 写代码时假设模块存在，实现时才发现不存在
-3. **工具 vs 行为**: 多个好工具，但 Agent 不一定会用
+1. **Specification vs Arbitrary**: OpenSpec provides specs, but Agent can skip and write code directly
+2. **Design vs Implementation**: Assumes modules exist when coding, discovers they don't during implementation
+3. **Tools vs Behavior**: Multiple good tools, but Agent doesn't necessarily use them
 
-### 解决方案：强制工作流
+### Solution: Forced Workflow
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -43,48 +44,48 @@ EXPLORE → SPEC → DESIGN VERIFICATION → DEV → VERIFY → ARCHIVE
 ├─────────────────────────────────────────────────────────────────┤
 │  ┌─────────┐   ┌─────────┐   ┌──────────────┐   ┌───────────┐  │
 │  │  CRG    │ + │OpenSpec │ + │DESIGN        │ + │Superpowers│  │
-│  │探索分析  │   │文档规范  │   │VERIFICATION  │   │技能执行   │  │
+│  │Exploratn│   │Document │   │VERIFICATION  │   │Skill Exec │  │
 │  └────┬────┘   └────┬────┘   └──────┬───────┘   └─────┬─────┘  │
 │       │            │              │                  │         │
 │       ▼            ▼              ▼                  ▼         │
 │  ┌─────────────────────────────────────────────────────────┐   │
-│  │              强制工作流编排器                             │   │
+│  │           Forced Workflow Orchestrator                  │   │
 │  │  EXPLORE → SPEC → DESIGN VERIFY → DEV → VERIFY → ARCHIVE │   │
 │  └─────────────────────────────────────────────────────────┘   │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-### 为什么这样做
+### Why We Do This
 
-| 痛点 | 解决方案 | 效果 |
-|------|----------|------|
-| 假设模块存在但实际不存在 | DESIGN VERIFICATION 阶段验证所有假设 | 编译前发现错误 |
-| 跳过 TDD 直接写代码 | tdd-phase 强制 RED→GREEN→REFACTOR | 测试覆盖率提升 |
-| 规范文档被忽视 | 集成到 workflow，每阶段必须完成 | 规范 100% 落地 |
-| 多个工具各自为政 | 统一触发机制 (keyword-detector) | 工具协同工作 |
-| 事后代码 Review | CRG 在 EXPLORE 阶段提前分析 | 预防优于治疗 |
+| Pain Point | Solution | Effect |
+|------------|----------|--------|
+| Assume module exists but it doesn't | DESIGN VERIFICATION validates all assumptions | Errors found before compilation |
+| Skip TDD, write code directly | tdd-phase enforces RED→GREEN→REFACTOR | Improved test coverage |
+| Specification docs ignored | Integrated into workflow, each phase required | 100% spec compliance |
+| Tools work independently | Unified trigger mechanism (keyword-detector) | Tools work together |
+| Post-hoc code review | CRG analyzes in EXPLORE phase | Prevention over cure |
 
-### 关键创新：DESIGN VERIFICATION
+### Key Innovation: DESIGN VERIFICATION
 
-这是解决"AI 幻觉编码"的核心：
+This solves the "AI hallucination coding" problem:
 
 ```
-编写代码时的假设:
-✗ import from 'shared/types'       → 实际路径: '@shared/types'
-✗ use createHook()                 → 实际 API: createHooks()
-✗ class UserService exists         → 实际: UserAPI
+Assumptions when writing code:
+✗ import from 'shared/types'       → Actual path: '@shared/types'
+✗ use createHook()                 → Actual API: createHooks()
+✗ class UserService exists         → Actual: UserAPI
 
-DESIGN VERIFICATION 做什么:
-1. 解析所有 import 语句
-2. 检查模块路径是否存在
-3. 验证 API 名称是否匹配
-4. 检查类型定义是否存在
-5. 生成验证报告，阻塞 DEV 阶段直到全部通过
+What DESIGN VERIFICATION does:
+1. Parse all import statements
+2. Check if module paths exist
+3. Verify API names match
+4. Check if type definitions exist
+5. Generate verification report, block DEV until all pass
 ```
 
-## 安装
+## Installation
 
-在 `opencode.json` 中添加插件：
+Add plugin to `opencode.json`:
 
 ```json
 {
@@ -94,16 +95,16 @@ DESIGN VERIFICATION 做什么:
 }
 ```
 
-重启 OpenCode 生效。
+Restart OpenCode to activate.
 
-## 使用方式
+## Usage
 
-### 自动触发
+### Auto Trigger
 
-当输入以下关键词时，自动触发 workflow：
+Workflow triggers automatically when entering these keywords:
 
-| 关键词 | 触发 |
-|--------|------|
+| Keyword | Trigger |
+|---------|---------|
 | `implement xxx` | ✅ |
 | `add xxx` | ✅ |
 | `create xxx` | ✅ |
@@ -113,42 +114,42 @@ DESIGN VERIFICATION 做什么:
 | `test-first` | ✅ |
 | `refactor` | ✅ |
 
-### 手动触发
+### Manual Trigger
 
-也可以使用 slash command（如果配置了对应 skill）：
+Also available via slash command (if corresponding skill is configured):
 
 ```
 /autopolit implement user login
 ```
 
-## 工作流阶段
+## Workflow Phases
 
-### 1. EXPLORE - 探索阶段
-- 使用 CRG (Code-Review-Graph) 分析代码库
-- 生成假设清单 (assumption list)
+### 1. EXPLORE - Exploration Phase
+- Use CRG (Code-Review-Graph) to analyze codebase
+- Generate assumption list
 
-### 2. SPEC - 规范阶段
-- 生成 proposal → specs → design → tasks
-- 每个文档 2-5 分钟粒度
+### 2. SPEC - Specification Phase
+- Generate proposal → specs → design → tasks
+- 2-5 minute granularity per document
 
-### 3. DESIGN VERIFICATION - 设计验证（新增）
-- 验证所有假设：模块路径、类型、API 是否存在
-- **阻塞 DEV 阶段直到所有假设验证通过**
+### 3. DESIGN VERIFICATION - Design Verification (New)
+- Validate all assumptions: module paths, types, API existence
+- **Blocks DEV phase until all assumptions verified**
 
-### 4. DEV - 开发阶段
-- TDD 强制：RED (写测试) → GREEN (实现) → REFACTOR
-- 禁止跳过测试直接写代码
+### 4. DEV - Development Phase
+- Forced TDD: RED (write test) → GREEN (implement) → REFACTOR
+- Forbidden to skip tests and write code directly
 
-### 5. VERIFY - 验证阶段
-- 自检清单：无 TODO、无占位符、无 AI-slop
-- 用户确认
+### 5. VERIFY - Verification Phase
+- Self-check list: no TODO, no placeholders, no AI-slop
+- User confirmation
 
-### 6. ARCHIVE - 归档阶段
-- 合并 delta specs 到主分支
+### 6. ARCHIVE - Archival Phase
+- Merge delta specs to main branch
 
-## 触发效果
+## Trigger Effect
 
-输入 `implement user login` 后，Agent 会收到：
+After entering `implement user login`, Agent receives:
 
 ```
 🤖 AUTOPOLIT WORKFLOW ACTIVATED
@@ -157,24 +158,24 @@ DESIGN VERIFICATION 做什么:
 1. EXPLORE → 2. SPEC → 3. DESIGN VERIFICATION → 4. DEV → 5. VERIFY → 6. ARCHIVE
 ```
 
-## 模块结构
+## Module Structure
 
 ```
 src/features/spec-driven-workflow/
-├── exploration-phase.ts      # 探索阶段管理
-├── specification-phase.ts    # 规范阶段管理  
-├── design-verification.ts    # 设计验证阶段
-├── tdd-phase.ts              # TDD 强制执行
-├── workflow-orchestrator.ts  # 工作流编排
-├── verification-phase.ts     # 验证阶段
-├── archival-phase.ts         # 归档阶段
-└── index.ts                  # 导出
+├── exploration-phase.ts # Exploration phase management
+├── specification-phase.ts # Specification phase management
+├── design-verification.ts # Design verification phase
+├── tdd-phase.ts # TDD enforcement
+├── workflow-orchestrator.ts # Workflow orchestration
+├── verification-phase.ts # Verification phase
+├── archival-phase.ts # Archival phase
+└── index.ts # Export
 ```
 
-## 依赖
+## Dependencies
 
 - oh-my-openagent
 - openspec
 - superpowers
 - code-review-graph (MCP)
-- wechat-acp (可选)
+- wechat-acp (optional)
