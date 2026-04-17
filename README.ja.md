@@ -11,11 +11,11 @@ oh-my-openagent + OpenSpec + Superpowers を統合した開発フレームワー
 ## コアワークフロー
 
 ```
-EXPLORE → SPEC → DESIGN VERIFICATION → DEV → VERIFY → ARCHIVE
-   ↓       ↓           ↓              ↓       ↓         ↓
-  CRG   Proposal    仮定検証        TDD    Checklists   Merge
-       Specs/Design               RED→GR→RF  User Approval
-       (BLOCKS DEV)
+EXPLORE → BRAINSTORM → SPEC → DESIGN VERIFICATION → DEV → VERIFY → ARCHIVE
+   ↓         ↓          ↓           ↓              ↓       ↓         ↓
+  CRG    仮定+リスク+ SPEC     仮定検証        TDD    Checklists   Merge
+               アイデア Proposal              RED→GR→RF  User Approval
+               (SPECに入力)  (BLOCKS DEV)
 ```
 
 ## フレームワーク比較分析
@@ -64,6 +64,23 @@ EXPLORE → SPEC → DESIGN VERIFICATION → DEV → VERIFY → ARCHIVE
 | 仕様ドキュメントが無視される | workflowに統合、各フェーズ完了必須 | 仕様100%実装 |
 | 複数のツールが各自で動く | 統一トリガーメカニズム (keyword-detector) | ツール連携 |
 | 事後コードレビュー | CRGがEXPLORE段階で事前に分析 | 予防は治療に勝る |
+| エッジケース/リスクを見落とす | BRAINSTORM段階で深く考える | コーディング前に準備完了 |
+
+### 主なイノベーション：BRAINSTORMフェーズ
+
+CRG (Code-Review-Graph) はコード構造を見つけられるが、以下は考えられない：
+- ビジネスロジックのエッジケース
+- ユーザー要件の曖昧さ
+- 潜在的なセキュリティ脆弱性
+- 新機能のボトルネック
+
+BRAINSTORMフェーズは **Prometheus**（計画コンサルタント）または **Oracle** を使用：
+1. 仮定に質疑 - "入力が空/null/無効の場合は？"
+2. リスク特定 - "本番環境で何が失敗する可能性あり？"
+3. 代替案探索 - "もっとシンプルなソリューションは？"
+4. 問題提起 - "要件が不明確：ユーザーがXを明確にする必要あり"
+
+出力はSPECへ入力 - 仕様は全てのブレインストーミング発見を扱う必要あり。
 
 ### 主なイノベーション：DESIGN VERIFICATION
 
@@ -126,9 +143,19 @@ slash commandも使用可能（対応skillが設定されている場合）：
 
 ### 1. EXPLORE - 探索フェーズ
 - CRG (Code-Review-Graph) でコードベースを分析
-- 仮定リスト (assumption list) を生成
+- コード構造マップ、キーコンポーネント、統合ポイントを生成
+- 出力はBrainstormフェーズへ
 
-### 2. SPEC - 仕様フェーズ
+### 2. BRAINSTORM - ブレインストーミングフェーズ（新規追加）
+- EXPLOREの結果に基づいて深く考える：
+  - **仮定補充**: CRGが見落とした仮定を追加
+  - **リスク発見**: 潜在的な落とし穴、エッジケース、競合状態を特定
+  - **ソリューション探索**: 複数の実装アプローチを検討
+  - **明確化質問**: 曖昧な要件を見つけ、ユーザーの確認を待つ
+- 出力: 強化された仮定リスト + リスクレジストリ + 明確化質問
+- **SPECフェーズへ入力** - 仕様は全てのブレインストーミング出力を扱う必要あり
+
+### 3. SPEC - 仕様フェーズ
 - proposal → specs → design → tasks を生成
 - 各ドキュメント 2-5分の粒度
 
@@ -155,7 +182,7 @@ slash commandも使用可能（対応skillが設定されている場合）：
 🤖 AUTOPOLIT WORKFLOW ACTIVATED
 
 🔄 WORKFLOW SEQUENCE (MANDATORY):
-1. EXPLORE → 2. SPEC → 3. DESIGN VERIFICATION → 4. DEV → 5. VERIFY → 6. ARCHIVE
+1. EXPLORE → 2. BRAINSTORM → 3. SPEC → 4. DESIGN VERIFICATION → 5. DEV → 6. VERIFY → 7. ARCHIVE
 ```
 
 ## モジュール構造
