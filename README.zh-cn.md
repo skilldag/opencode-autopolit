@@ -11,11 +11,11 @@
 ## 核心工作流
 
 ```
-EXPLORE → SPEC → DESIGN VERIFICATION → DEV → VERIFY → ARCHIVE
-   ↓       ↓           ↓              ↓       ↓         ↓
-  CRG   Proposal    假设验证        TDD    Checklists   Merge
-       Specs/Design               RED→GR→RF  User Approval
-       (BLOCKS DEV)
+EXPLORE → BRAINSTORM → SPEC → DESIGN VERIFICATION → DEV → VERIFY → ARCHIVE
+   ↓         ↓          ↓           ↓              ↓       ↓         ↓
+  CRG    假设+风险+提案 Proposal  假设验证        TDD    Checklists   Merge
+                   问题发现  Specs/Design RED→GR→RF  User Approval
+                   (输入SPEC)  (阻塞DEV)
 ```
 
 ## 框架对比分析
@@ -64,6 +64,23 @@ EXPLORE → SPEC → DESIGN VERIFICATION → DEV → VERIFY → ARCHIVE
 | 规范文档被忽视 | 集成到 workflow，每阶段必须完成 | 规范 100% 落地 |
 | 多个工具各自为政 | 统一触发机制 (keyword-detector) | 工具协同工作 |
 | 事后代码 Review | CRG 在 EXPLORE 阶段提前分析 | 预防优于治疗 |
+| 遗漏边界情况/风险 | BRAINSTORM 阶段深入思考 | 编码前更充分准备 |
+
+### 关键创新：BRAINSTORM 阶段
+
+CRG (Code-Review-Graph) 能找到代码结构，但无法思考：
+- 业务逻辑边界情况
+- 用户需求模糊之处
+- 潜在的安全漏洞
+- 新功能的性能瓶颈
+
+BRAINSTORM 阶段使用 **Prometheus**（计划顾问）或 **Oracle** 来：
+1. 质疑假设 - "如果输入为空/null/无效怎么办？"
+2. 识别风险 - "生产环境可能哪里会失败？"
+3. 探索替代方案 - "有没有更简单的方案？"
+4. 暴露问题 - "需求不明确：需要用户澄清 X"
+
+输出输入到 SPEC - 规范必须解决所有头脑风暴发现。
 
 ### 关键创新：DESIGN VERIFICATION
 
@@ -126,9 +143,19 @@ DESIGN VERIFICATION 做什么:
 
 ### 1. EXPLORE - 探索阶段
 - 使用 CRG (Code-Review-Graph) 分析代码库
-- 生成假设清单 (assumption list)
+- 生成代码结构图、关键组件、集成点
+- 输出供头脑风暴阶段使用
 
-### 2. SPEC - 规范阶段
+### 2. BRAINSTORM - 头脑风暴阶段（新增）
+- 基于 EXPLORE 结果进行深入思考：
+  - **假设补充**：补充 CRG 遗漏的假设
+  - **风险发现**：识别潜在陷阱、边界条件、竞态条件
+  - **方案探索**：考虑多种实现方案
+  - **澄清问题**：发现模糊需求，等待用户确认
+- 输出：增强的假设清单 + 风险登记册 + 澄清问题
+- **输入到 SPEC 阶段** - 规范必须解决所有头脑风暴产出
+
+### 3. SPEC - 规范阶段
 - 生成 proposal → specs → design → tasks
 - 每个文档 2-5 分钟粒度
 
@@ -155,7 +182,7 @@ DESIGN VERIFICATION 做什么:
 🤖 AUTOPOLIT WORKFLOW ACTIVATED
 
 🔄 WORKFLOW SEQUENCE (MANDATORY):
-1. EXPLORE → 2. SPEC → 3. DESIGN VERIFICATION → 4. DEV → 5. VERIFY → 6. ARCHIVE
+1. EXPLORE → 2. BRAINSTORM → 3. SPEC → 4. DESIGN VERIFICATION → 5. DEV → 6. VERIFY → 7. ARCHIVE
 ```
 
 ## 模块结构

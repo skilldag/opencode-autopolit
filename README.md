@@ -11,11 +11,11 @@ An integrated development framework based on oh-my-openagent + OpenSpec + Superp
 ## Core Workflow
 
 ```
-EXPLORE → SPEC → DESIGN VERIFICATION → DEV → VERIFY → ARCHIVE
-   ↓       ↓           ↓              ↓       ↓         ↓
-  CRG   Proposal    Assumption      TDD    Checklists   Merge
-       Specs/Design  Verification  RED→GR→RF  User Approval
-       (BLOCKS DEV)
+EXPLORE → BRAINSTORM → SPEC → DESIGN VERIFICATION → DEV → VERIFY → ARCHIVE
+   ↓         ↓          ↓           ↓              ↓       ↓         ↓
+  CRG    Assumptions Proposal    Assumption     TDD    Checklists   Merge
+       + Risks + Ideas Specs/Design Verification RED→GR→RF User Approval
+       (FEEDS SPEC)  (BLOCKS DEV)
 ```
 
 ## Framework Comparison
@@ -64,6 +64,23 @@ EXPLORE → SPEC → DESIGN VERIFICATION → DEV → VERIFY → ARCHIVE
 | Specification docs ignored | Integrated into workflow, each phase required | 100% spec compliance |
 | Tools work independently | Unified trigger mechanism (keyword-detector) | Tools work together |
 | Post-hoc code review | CRG analyzes in EXPLORE phase | Prevention over cure |
+| Missing edge cases / risks | BRAINSTORM phase for deep thinking | Better prepared before coding |
+
+### Key Innovation: BRAINSTORM Phase
+
+CRG (Code-Review-Graph) finds code structure, but it can't think about:
+- Business logic edge cases
+- User requirement ambiguities
+- Potential security vulnerabilities
+- Performance bottlenecks in new features
+
+The BRAINSTORM phase uses **Prometheus** (Plan Consultant) or **Oracle** to:
+1. Question assumptions - "What if input is empty/null/invalid?"
+2. Identify risks - "What could fail in production?"
+3. Explore alternatives - "Is there a simpler solution?"
+4. Surface questions - "Requirements unclear: user needs to clarify X"
+
+Output feeds into SPEC - specs must address all brainstorm findings.
 
 ### Key Innovation: DESIGN VERIFICATION
 
@@ -126,9 +143,19 @@ Also available via slash command (if corresponding skill is configured):
 
 ### 1. EXPLORE - Exploration Phase
 - Use CRG (Code-Review-Graph) to analyze codebase
-- Generate assumption list
+- Generate code structure map, key components, integration points
+- Output feeds into Brainstorm phase
 
-### 2. SPEC - Specification Phase
+### 2. BRAINSTORM - Brainstorming Phase (New)
+- Based on EXPLORE results, conduct deep thinking:
+  - **Assumption Supplement**: Add any assumptions missed by CRG
+  - **Risk Discovery**: Identify potential pitfalls, edge cases, race conditions
+  - **Solution Exploration**: Consider multiple implementation approaches
+  - **Clarification Questions**: Surface ambiguous requirements for user input
+- Output: Enhanced assumption list + risk register + clarification questions
+- **Feeds into SPEC phase** - spec must address all brainstorm outputs
+
+### 3. SPEC - Specification Phase
 - Generate proposal → specs → design → tasks
 - 2-5 minute granularity per document
 
@@ -155,21 +182,22 @@ After entering `implement user login`, Agent receives:
 🤖 AUTOPOLIT WORKFLOW ACTIVATED
 
 🔄 WORKFLOW SEQUENCE (MANDATORY):
-1. EXPLORE → 2. SPEC → 3. DESIGN VERIFICATION → 4. DEV → 5. VERIFY → 6. ARCHIVE
+1. EXPLORE → 2. BRAINSTORM → 3. SPEC → 4. DESIGN VERIFICATION → 5. DEV → 6. VERIFY → 7. ARCHIVE
 ```
 
 ## Module Structure
 
 ```
 src/features/spec-driven-workflow/
-├── exploration-phase.ts # Exploration phase management
-├── specification-phase.ts # Specification phase management
-├── design-verification.ts # Design verification phase
-├── tdd-phase.ts # TDD enforcement
+├── exploration-phase.ts     # Exploration phase (CRG analysis)
+├── brainstorm-phase.ts      # Brainstorming phase (Prometheus/Oracle)
+├── specification-phase.ts   # Specification phase management
+├── design-verification.ts   # Design verification phase
+├── tdd-phase.ts             # TDD enforcement
 ├── workflow-orchestrator.ts # Workflow orchestration
-├── verification-phase.ts # Verification phase
-├── archival-phase.ts # Archival phase
-└── index.ts # Export
+├── verification-phase.ts    # Verification phase
+├── archival-phase.ts        # Archival phase
+└── index.ts                 # Export
 ```
 
 ## Dependencies
