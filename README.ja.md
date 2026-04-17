@@ -2,6 +2,8 @@
 
 強制ワークフローフレームワーク - 探索→仕様→設計検証→開発(TDD)→検証→アーカイブ
 
+[English](README.md) | [简体中文](README.zh-cn.md) | **日本語** | [한국어](README.ko.md) | [Русский](README.ru.md)
+
 ## 概要
 
 oh-my-openagent + OpenSpec + Superpowers を統合した開発フレームワーク。仕様駆動＋テスト駆動の開発プロセスを強制執行します。
@@ -177,7 +179,3 @@ src/features/spec-driven-workflow/
 - superpowers
 - code-review-graph (MCP)
 - wechat-acp (オプション)
-
----
-
-[English](README.md) | [한국어](README.ko.md) | [简体中文](README.zh-cn.md) | [Русский](README.ru.md)

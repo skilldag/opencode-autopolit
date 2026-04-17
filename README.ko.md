@@ -2,6 +2,8 @@
 
 강제 워크플로우 프레임워크 - 탐색→사양→설계검증→개발(TDD)→검증→아카이브
 
+[English](README.md) | [简体中文](README.zh-cn.md) | [日本語](README.ja.md) | **한국어** | [Русский](README.ru.md)
+
 ## 개요
 
 oh-my-openagent + OpenSpec + Superpowers를 통합한 개발 프레임워크. 사양 중심 + 테스트 중심 개발 프로세스를 강제执行합니다.
@@ -177,7 +179,3 @@ src/features/spec-driven-workflow/
 - superpowers
 - code-review-graph (MCP)
 - wechat-acp (선택)
-
----
-
-[English](README.md) | [简体中文](README.zh-cn.md) | [日本語](README.ja.md) | [Русский](README.ru.md)

@@ -2,6 +2,8 @@
 
 强制工作流框架 - 探索→规范→验证→开发(TDD)→验证→归档
 
+**English** | [简体中文](README.zh-cn.md) | [日本語](README.ja.md) | [한국어](README.ko.md) | [Русский](README.ru.md)
+
 ## 概述
 
 基于 oh-my-openagent + OpenSpec + Superpowers 的集成开发框架，强制执行规范驱动+测试驱动的开发流程。
@@ -176,7 +178,3 @@ src/features/spec-driven-workflow/
 - superpowers
 - code-review-graph (MCP)
 - wechat-acp (可选)
-
----
-
-[简体中文](README.zh-cn.md) | [日本語](README.ja.md) | [한국어](README.ko.md) | [Русский](README.ru.md)
