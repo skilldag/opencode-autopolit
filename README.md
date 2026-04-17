@@ -176,3 +176,7 @@ src/features/spec-driven-workflow/
 - superpowers
 - code-review-graph (MCP)
 - wechat-acp (可选)
+
+---
+
+[简体中文](README.zh-cn.md) | [日本語](README.ja.md) | [한국어](README.ko.md) | [Русский](README.ru.md)
